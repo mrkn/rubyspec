@@ -276,4 +276,16 @@ describe "The postfix if form" do
   end
 end
 
+describe "The if expression with a range with two boolean expressions" do
+  it "considers the range notation as an awk-like conditional expression if the end value is not excluded" do
+    10.times.inject([]) {|a, i| if (i == 4)..(i == 7) then a << i else a end }.should == [4, 5, 6, 7]
+    10.times.inject([]) {|a, i| if (i == 4)..(i == 4) then a << i else a end }.should == [4]
+  end
+
+  it "considers the range notation as a sed-like conditional expression if the end value is excluded" do
+    10.times.inject([]) {|a, i| if (i == 4)...(i == 4) then a << i else a end }.should == [4, 5, 6, 7, 8, 9]
+    10.times.inject([]) {|a, i| if (i == 4)...(i == 5) then a << i else a end }.should == [4, 5]
+  end
+end
+
 language_version __FILE__, "if"
